@@ -2,15 +2,14 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config/env.js';
 
 export const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const [, token] = authHeader?.split(' ');
+  const { accessToken } = req.cookies;
 
-  if (!token) return res.status(401).json({ message: 'Access denied.' });
+  if (!accessToken) return res.status(403).json({ message: 'Access denied.' });
 
-  jwt.verify(token, config.accessTokenSecret, (err, user) => {
-    if (err) return res.status(403).json({ message: 'Invalid token' });
+  jwt.verify(accessToken, config.accessTokenSecret, (err, user) => {
+    if (err) return res.status(401).json({ message: 'Invalid token' });
 
-    req.user = user;
+    req.user = user.sub.replaceAll('"', '');
     return next();
   });
 };

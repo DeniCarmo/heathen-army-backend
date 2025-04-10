@@ -20,12 +20,26 @@ const LoginUserController  = async (req, res) => {
   
   const refreshToken = await GenerateRefreshTokenProvider(user._id);
 
+  res.cookie('accessToken', accessToken, {
+    maxAge: 120000,
+    httpOnly: true,
+    secure: false,
+    sameSite: 'Lax'
+  });
+
+  res.cookie('refreshToken', refreshToken.value, {
+    maxAge: 120000,
+    httpOnly: true,
+    secure: false,
+    sameSite: 'Lax'
+  });
+
   return res.json({
-    accessToken,
-    refreshToken: {
-      value: refreshToken.value,
-      expirationDate: refreshToken.expirationDate,
-      userId: refreshToken.userId
+    status: 200,
+    message: 'User logged successfuly',
+    data: {
+      username: user.username,
+      email: user.email
     }
   });
 }

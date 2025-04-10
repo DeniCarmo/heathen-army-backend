@@ -22,6 +22,18 @@ const RefreshTokenController = async (req, res) => {
     return res.json({ token, refreshToken: newRefreshToken });
   }
 
+  res.cookie('heathenArmy.refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'Strict'
+  });
+
+  res.cookie('heathenArmy.accesshToken', accessToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'Strict'
+  });
+
   return res.json({ token });
 };
 
