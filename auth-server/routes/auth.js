@@ -9,7 +9,7 @@ import { RefreshTokenController } from '../controllers/RefreshTokenController.js
 const router = Router();
 
 // GET USER
-router.get('/', authenticateToken, GetUserController);
+router.get('/verify-user', authenticateToken, GetUserController);
 // REGISTER
 router.post('/register', RegisterUserController);
 // LOGIN
